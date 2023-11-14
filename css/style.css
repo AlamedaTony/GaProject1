@@ -25,10 +25,8 @@ header {
     grid-template-columns: repeat(13,9.5vmin);
     grid-template-rows: repeat(4,16vmin);
     gap: 2vmin;
-    
 }
 
 #board>div {
     background-color: black;
-
 }
