@@ -17,7 +17,7 @@
 
 	/*----- event listeners -----*/
     document.querySelector("button").addEventListener("click", onPlayAgainClick);
-
+    document.querySelector(".card-container").addEventListener("click", onCardClick);
 	/*----- functions -----*/
     init();
 
@@ -45,8 +45,13 @@
 
     }
 
+    function flipCard() {
+
+    }
+
     function onCardClick() {
         //if a card is already visable(face value showing), do nothing
+        //if ()
         //flip card over showing the "face" value
         //if card already flipped and clicked card doesn't match, flip back over to "back" value
         //if card is already flipped and cicked card does match, stay flipped
