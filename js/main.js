@@ -4,7 +4,7 @@
 
     //build an "original" deck of "card" objects used to create shuffled cards
     const originalDeck = buildOriginalDeck();
-    renderDeckInContainer(originalDeck, document.getElementById("original-dek-container"));
+    //renderDeckInContainer(originalDeck, document.getElementById("original-deck-container"));
 	/*----- state variables -----*/
     let board;
     let winner;
@@ -16,7 +16,7 @@
     const shuffledContainer = document.getElementById("shuffled-deck-container");
 
 	/*----- event listeners -----*/
-    document.querySelector("button").addEventListener("click", renderNewShuffledDeck);
+    document.querySelector("button").addEventListener("click", onPlayAgainClick);
 
 	/*----- functions -----*/
     init();
@@ -33,13 +33,44 @@
         //then, take each card object push each row
     }
 
+    function onPlayAgainClick() {
+        //need to reset game state
+        //reshuffle deck
+        //all cards show "back" value
+        // winner message disappers
+
+
+
+        renderNewShuffledDeck();
+
+    }
+
+    function onCardClick() {
+        //if a card is already visable(face value showing), do nothing
+        //flip card over showing the "face" value
+        //if card already flipped and clicked card doesn't match, flip back over to "back" value
+        //if card is already flipped and cicked card does match, stay flipped
+        //if all cards are clicked, needs to render winner message
+    }
+
     function getNewShuffledDeck() {
+        //shallow copy created
         const tempDeck = [...originalDeck];
         const newShuffledDeck = [];
         while (tempDeck.length) {
+
+            //need to know if a card is visable(face value is showing) or not
+
+            //need to know if it is matched
+
             const rndIdx = Math.floor(Math.random() * tempDeck.length);
-            newShuffledDeck.push(tempDeck.splice(rndIdx, 1) [0]);
+            tempDeck[rndIdx].visable = false;
+            tempDeck[rndIdx].matched = false;
+
+            newShuffledDeck.push(tempDeck.splice(rndIdx, 1)[0]);
+
         }
+        console.log(newShuffledDeck);
         return newShuffledDeck;
     }
 
@@ -49,9 +80,10 @@
             ranks.forEach(function(rank) {
                 deck.push({
                     face: `${suit}${rank}`,
-                })
-            })
-        })
+                });
+            });
+        });
+        //console.log(deck);
         return deck;
     }
 
@@ -59,12 +91,14 @@
         shuffledDeck = getNewShuffledDeck();
         renderDeckInContainer(shuffledDeck, shuffledContainer);
     }
+
+
     function renderDeckInContainer(deck, container) {
         container.innerHTML = "";
         //build the cards as a string of HTML
         let cardsHtml = "";
         deck.forEach(function(card) {
-            cards.Html += `<div class="card ${card.face}"></div>`;
+            cardsHtml += `<div class="card ${card.face}"></div>`;
         });
         container.innerHTML = cardsHtml;
     }
