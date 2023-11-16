@@ -21,7 +21,7 @@
 
 	/*----- cached elements  -----*/
     const playAgainBtn = document.getElementById("play again");
-    const shuffledContainer = document.getElementById("shuffled-deck-container");
+    const boardEl = document.getElementById("shuffled-deck-container");
     //console.log(shuffledContainer);
     
     
@@ -35,13 +35,56 @@
 
     
     function init() {
+        shuffledDeck = getNewShuffledDeck();
         board = [
             [],
             [],
             [],
             [],
         ];
-        
+        board.forEach(function(row) {
+            for (let i = 0; i < 13; i++) {
+                row.push(shuffledDeck.pop());
+            }
+        });
+        render();
+    }
+
+
+    function render() {
+        renderBoard();
+    }
+
+    function renderBoard() {
+        board.forEach(function(row) {
+            row.forEach(function(card) {
+                const cardEl = document.createElement("div");
+                if(card.flipped) {
+                    cardEl.className = `card ${card.face}`
+                    
+                } else {
+                    cardEl.className = "card back";
+                }
+                boardEl.append(cardEl);
+            })
+        })
+    };
+
+    function renderDeckInContainer(deck, container) {
+        container.innerHTML = "";
+        //build the cards as a string of HTML
+        let cardsHtml = "";
+        deck.forEach(function(card) {
+            cardsHtml += `<div class="card back ${card.face}"></div>`;
+            
+        });
+        container.innerHTML = cardsHtml;
+        const cards = document.querySelectorAll(".card");
+        //console.log(cards);
+            
+        cards.forEach(function(card) {
+             card.addEventListener("click", onCardClick)
+           })
     }
 
     function onPlayAgainClick() {
@@ -79,8 +122,6 @@
 
             //need to know if it is matched
             const rndIdx = Math.floor(Math.random() * tempDeck.length);
-            tempDeck[rndIdx].visable = false;
-            tempDeck[rndIdx].matched = false;
             newShuffledDeck.push(tempDeck.splice(rndIdx, 1)[0]);
         }
         
@@ -93,6 +134,7 @@
             ranks.forEach(function(rank) {
                 deck.push({
                     face: `${suit}${rank}`,
+                    flipped: false,
                 });
             });
         });
@@ -102,24 +144,9 @@
 
     function renderNewShuffledDeck() {
         shuffledDeck = getNewShuffledDeck();
-        renderDeckInContainer(shuffledDeck, shuffledContainer);
+        renderDeckInContainer(shuffledDeck, boardEl);
     }
 
 
-    function renderDeckInContainer(deck, container) {
-        container.innerHTML = "";
-        //build the cards as a string of HTML
-        let cardsHtml = "";
-        deck.forEach(function(card) {
-            cardsHtml += `<div class="card back ${card.face}"></div>`;
-            
-        });
-        container.innerHTML = cardsHtml;
-        const cards = document.querySelectorAll(".card");
-        //console.log(cards);
-            
-        cards.forEach(function(card) {
-             card.addEventListener("click", onCardClick)
-           })
-    }
-    renderNewShuffledDeck();
+    
+   
