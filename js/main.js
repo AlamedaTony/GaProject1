@@ -16,9 +16,7 @@
 	/*----- state variables -----*/
     let board;
     let winner;
-    let currentCard;
-    let shuffledDeck;
-
+    let firstPick;
 	/*----- cached elements  -----*/
     const playAgainBtn = document.getElementById("play again");
     const boardEl = document.getElementById("shuffled-deck-container");
@@ -28,8 +26,8 @@
     
     //console.log(shuffledDeck);
 	/*----- event listeners -----*/
-    document.querySelector("button").addEventListener("click", onPlayAgainClick);
-    
+    document.querySelector("button").addEventListener("click", init);
+    boardEl.addEventListener("click", handleBoardClick);
 	/*----- functions -----*/
     init();
 
@@ -42,11 +40,15 @@
             [],
             [],
         ];
+
         board.forEach(function(row) {
             for (let i = 0; i < 13; i++) {
                 row.push(shuffledDeck.pop());
             }
         });
+
+        firstPick = null;
+
         render();
     }
 
@@ -56,9 +58,13 @@
     }
 
     function renderBoard() {
-        board.forEach(function(row) {
-            row.forEach(function(card) {
+        boardEl.innerHTML = "";
+        board.forEach(function(row, rowIdx) {
+            row.forEach(function(card, colIdx) {
                 const cardEl = document.createElement("div");
+                cardEl.dataset.row = rowIdx;
+                cardEl.dataset.col = colIdx;
+                //cardEl.id = `r${rowIdx}c${colIdx}`;
                 if(card.flipped) {
                     cardEl.className = `card ${card.face}`
                     
@@ -87,30 +93,19 @@
            })
     }
 
-    function onPlayAgainClick() {
-        //need to reset game state
-        //reshuffle deck
-        //all cards show "back" value
-        // winner message disappers
-
-
-
-        renderNewShuffledDeck();
-
-    }
-
-    function onCardClick(evt) {
-        //flip card over showing the "face" value
-        evt.target.classList.remove("back");
-        /*When a card is clicked the back class is removed
-        */
+    function handleBoardClick(evt) {
+        if (!("row" in evt.target.dataset)) return;
+        const row = parseInt(evt.target.dataset.row);
+        const col = parseInt(evt.target.dataset.col);
+        board[row][col].flipped = true;
+        //if there is no current firstPick,equal null, then set
+        //card that was clicked to be equal to firstPick
+        
+        //otherwise,if there is a current firstPick
+        //compare the current firstPick to card just clicked
        
        
-
-        //if a card is already visable(face value showing), do nothing
-        //if card already flipped and clicked card doesn't match, flip back over to "back" value
-        //if card is already flipped and cicked card does match, stay flipped
-        //if all cards are clicked, needs to render winner message
+        render();
     }
 
     function getNewShuffledDeck() {
@@ -140,11 +135,6 @@
         });
         //console.log(deck);
         return deck;
-    }
-
-    function renderNewShuffledDeck() {
-        shuffledDeck = getNewShuffledDeck();
-        renderDeckInContainer(shuffledDeck, boardEl);
     }
 
 
