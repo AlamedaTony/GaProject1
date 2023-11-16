@@ -3,15 +3,17 @@
 const suits = ["s", "c", "d", "h"];
 const ranks = ["02", "03", "04", "05", "06", "07", "08", "09", "10", "J", "Q", "K", "A" ];
 
-const originalDeck = buildOriginalDeck();
+
 //renderDeckInContainer(originalDeck, document.getElementById("original-deck-container"));
 /*----- state variables -----*/
 let board;
 let winner;
 let firstPick;
+let shuffledDeck;
 /*----- cached elements  -----*/
 const playAgainBtn = document.getElementById("play again");
 const boardEl = document.getElementById("shuffled-deck-container");
+const messageEl = document.querySelector("h1");
 //console.log(shuffledContainer);
 
 
@@ -48,6 +50,7 @@ function init() {
 
 function render() {
     renderBoard();
+    renderMessage();
 }
 
 function renderBoard() {
@@ -69,23 +72,6 @@ function renderBoard() {
     })
 };
 
-function renderDeckInContainer(deck, container) {
-    container.innerHTML = "";
-    //build the cards as a string of HTML
-    let cardsHtml = "";
-    deck.forEach(function(card) {
-        cardsHtml += `<div class="card back ${card.face}"></div>`;
-        
-    });
-    container.innerHTML = cardsHtml;
-    const cards = document.querySelectorAll(".card");
-    //console.log(cards);
-        
-    cards.forEach(function(card) {
-            card.addEventListener("click", onCardClick)
-        })
-}
-
 function handleBoardClick(evt) {
     if (
         !("row" in evt.target.dataset) ||
@@ -101,10 +87,12 @@ function handleBoardClick(evt) {
         firstPick = null;
         checkWinner();
     } else {
+        boardEl.removeEventListener("click", handleBoardClick);
         setTimeout(function() {
             firstPick.flipped = false;
             board[row][col].flipped = false;
             firstPick = null;
+            boardEl.addEventListener("click", handleBoardClick);
             render();
         }, 3000)
     }
@@ -113,7 +101,7 @@ function handleBoardClick(evt) {
 
 function getNewShuffledDeck() {
     //shallow copy created
-    const tempDeck = [...originalDeck];
+    const tempDeck = buildOriginalDeck();
     const newShuffledDeck = [];
     while (tempDeck.length) {
         const rndIdx = Math.floor(Math.random() * tempDeck.length);
@@ -141,21 +129,28 @@ function buildOriginalDeck() {
 function checkWinner() {
     //check the board array and if EVERY card obj is flipped
     //set winner to true
-    board.forEach(function(row) {
-        row.forEach(function(col) {
-            if (col.every(function(card) {
-                card.flipped === true;
-            })
-            ) {
-                winnerMessage();
-                return winner = true;
-            }
+    winner = board.every(function(row) {
+        return row.every(function(card) {
+           return card.flipped;
         })
     })
     
 }
 
-function winnerMessage() {
-    console.log("Congrats, you got all the matches!");
-    //render();
+function renderMessage() {
+    if (winner) {
+        messageEl.innerText = "Congrats! You got all the matches!";
+    } else {
+        messageEl.innerText = "Keep flippin";
+    }
+}
+
+function cheatCode() {
+    board.forEach(function(row) {
+        row.forEach(function(card) {
+            card.flipped = true;
+        })
+    })
+    checkWinner();
+    render();
 }
