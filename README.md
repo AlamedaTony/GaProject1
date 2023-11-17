@@ -27,3 +27,19 @@ a queen of hearts, an 8 of clubs and an 8 of spades.
 ### Getting Started
 
 https://alamedatony.github.io/GaProject1/
+
+Start the game by click in one card, then clicking
+on a different card. Repeat the process till you 
+get a matching pair. The goal is to get all the
+matching pairs and get the end of game message.
+Feel free to click the "play again" button at 
+the end of the game.
+
+### Future Steps
+
+Future steps would include:
+- adding a timer that counts up,
+which would enable to player to time themselves each game.
+- Add varying deck size options, to allow for faster games.
+- Additional board scheme options, to provide the player
+with a more unique board feel.

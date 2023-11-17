@@ -3,8 +3,6 @@
 const suits = ["s", "c", "d", "h"];
 const ranks = ["02", "03", "04", "05", "06", "07", "08", "09", "10", "J", "Q", "K", "A" ];
 
-
-//renderDeckInContainer(originalDeck, document.getElementById("original-deck-container"));
 /*----- state variables -----*/
 let board;
 let winner;
@@ -14,17 +12,11 @@ let shuffledDeck;
 const playAgainBtn = document.getElementById("play again");
 const boardEl = document.getElementById("shuffled-deck-container");
 const messageEl = document.querySelector("h1");
-//console.log(shuffledContainer);
-
-
-
-//console.log(shuffledDeck);
 /*----- event listeners -----*/
 document.querySelector("button").addEventListener("click", init);
 boardEl.addEventListener("click", handleBoardClick);
 /*----- functions -----*/
 init();
-
 
 function init() {
     shuffledDeck = getNewShuffledDeck();
@@ -122,13 +114,11 @@ function buildOriginalDeck() {
             });
         });
     });
-    //console.log(deck);
+    
     return deck;
 }
 
 function checkWinner() {
-    //check the board array and if EVERY card obj is flipped
-    //set winner to true
     winner = board.every(function(row) {
         return row.every(function(card) {
            return card.flipped;
